@@ -40,10 +40,10 @@ function Hero() {
       </div>
       <div className="text-center max-w-3xl">
         <h2 className="font-bold text-[60px] text-slate-700">
-          Easy scheduling ahead
+          Easy Eventing ahead
         </h2>
         <h2 className="text-xl mt-5 text-slate-500">
-          Scheduly is your scheduling automation platform for eliminating the
+          Scheduly is your Event automation platform for eliminating the
           back-and-forth emails to find the perfect time — and so much more.
         </h2>
         <div className="flex gap-4 flex-col mt-5">
