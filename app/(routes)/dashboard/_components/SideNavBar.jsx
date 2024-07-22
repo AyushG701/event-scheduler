@@ -46,7 +46,7 @@ const SideNavBar = () => {
         <Image src="/logo.svg" width={150} height={150} alt="logo" />
       </div>
 
-      <Link href={"/create-meeting"}>
+      <Link href={"/create-event"}>
         <Button
           className="flex gap-2 w-full 
         mt-7
