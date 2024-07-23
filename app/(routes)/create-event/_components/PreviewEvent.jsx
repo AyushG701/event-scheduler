@@ -1,16 +1,51 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Clock, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
+import React, { useEffect, useState } from "react";
 
 const PreviewEvent = ({ formValue }) => {
   const [date, setDate] = useState(new Date());
+  const [timeSlots, setTimeSlots] = useState();
+
+  useEffect(() => {
+    formValue?.duration && createTimeSlot(formValue?.duration);
+  }, [formValue]);
+
+  /**
+   * Used to create timeslot depends on interval
+   @param {*} interval
+   **/
+
+  const createTimeSlot = (interval) => {
+    const startTime = 8 * 60; // 8 AM in minutes
+    const endTime = 22 * 60; // 10 PM in minutes
+    const totalSlots = (endTime - startTime) / interval;
+    const slots = Array.from({ length: totalSlots }, (_, i) => {
+      const totalMinutes = startTime + i * interval;
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      const formattedHours = hours > 12 ? hours - 12 : hours; // Convert to 12-hour format
+      const period = hours >= 12 ? "PM" : "AM";
+      return `${String(formattedHours).padStart(2, "0")}:${String(
+        minutes,
+      ).padStart(2, "0")} ${period}`;
+    });
+    console.log(slots);
+    setTimeSlots(slots);
+  };
 
   return (
-    <div className="p-5 py-10 shadow-lg m-5 border-t-8">
+    <div
+      className="p-5 py-10 shadow-lg m-5 border-t-8 border-b-8"
+      style={{
+        borderTopColor: formValue?.themeColor,
+        borderBottomColor: formValue?.themeColor,
+      }}
+    >
       <Image src="/logo.svg" alt="logo" width={110} height={110} />
 
       <div className="grid grid-cols-1 md:grid-cols-3 mt-5">
@@ -37,8 +72,9 @@ const PreviewEvent = ({ formValue }) => {
             </Link>
           </div>
         </div>
-        {/* date and time section */}
         <div className="md:col-span-2 flex px-4">
+          {/* date and time section */}
+
           <div className="flex flex-col">
             <h2 className="font-bold text-lg">Select Date & Time</h2>
             <Calendar
@@ -49,12 +85,15 @@ const PreviewEvent = ({ formValue }) => {
               disabled={(date) => date <= new Date()}
             />
           </div>
-          {/* <div
+
+          {/* time slots */}
+          <div
             className="flex flex-col w-full overflow-auto gap-4 p-5"
             style={{ maxHeight: "400px" }}
           >
             {timeSlots?.map((time, index) => (
               <Button
+                key={index}
                 className="border-primary
                          text-primary"
                 variant="outline"
@@ -62,7 +101,7 @@ const PreviewEvent = ({ formValue }) => {
                 {time}
               </Button>
             ))}
-          </div> */}
+          </div>
         </div>
       </div>
     </div>
