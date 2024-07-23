@@ -45,7 +45,7 @@ const PreviewEvent = ({ formValue }) => {
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md border mt-5"
+              className="rounded-md border mt-5 shadow"
               disabled={(date) => date <= new Date()}
             />
           </div>
