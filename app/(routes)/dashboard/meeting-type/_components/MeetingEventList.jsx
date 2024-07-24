@@ -35,6 +35,7 @@ function MeetingEventList() {
     user && getEventList();
     user && BusinessInfo();
   }, [user]);
+
   const getEventList = async () => {
     setEventList([]);
     const q = query(
@@ -73,6 +74,7 @@ function MeetingEventList() {
     navigator.clipboard.writeText(meetingEventUrl);
     toast("Copied to Clicpboard");
   };
+
   return (
     <div
       className="mt-10 grid grid-cols-1 md:grid-cols-2 
