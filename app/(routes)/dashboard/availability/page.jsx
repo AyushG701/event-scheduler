@@ -1,11 +1,14 @@
 "use client";
 
 import DaysList from "@/app/_utils/DaysList";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { app } from "@/config/FirebaseConfig";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { doc, getDoc, getFirestore, updateDoc } from "firebase/firestore";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const Availability = () => {
   const [daysAvailable, setDaysAvailable] = useState(
