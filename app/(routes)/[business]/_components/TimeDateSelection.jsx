@@ -13,8 +13,8 @@ function TimeDateSelection({
 }) {
   /**
    * Used to check timeslot whether its already booked or not
-   * @param {*} time
-   * @returns Boolean
+   * param {*} time
+   * returns Boolean
    */
   const checkTimeSlot = (time) => {
     return prevBooking.filter((item) => item.selectedTime == time).length > 0;

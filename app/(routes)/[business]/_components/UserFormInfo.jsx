@@ -19,8 +19,8 @@ function UserFormInfo({ setUserName, setUserEmail, setUserNote }) {
       </div>
       <div>
         <h2 className="text-xs text-gray-400">
-          By Proceeding, you confirm that you read and agree Tubeguruji terms
-          and condition
+          By Proceeding, you confirm that you read and agree Our terms and
+          condition
         </h2>
       </div>
     </div>

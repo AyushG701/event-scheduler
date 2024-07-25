@@ -7,6 +7,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import TimeDateSelection from "./TimeDateSelection";
 import UserFormInfo from "./UserFormInfo";
+import { render } from "@react-email/components";
 import {
   collection,
   doc,
@@ -19,12 +20,15 @@ import {
 import { app } from "@/config/FirebaseConfig";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Plunk from "@plunk/node";
+import Email from "@/emails";
 
 function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const [date, setDate] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState();
   const [enableTimeSlot, setEnabledTimeSlot] = useState(false);
   const [selectedTime, setSelectedTime] = useState();
+
   const [userName, setUserName] = useState();
   const [userEmail, setUserEmail] = useState();
   const [userNote, setUserNote] = useState("");
@@ -33,7 +37,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
   const router = useRouter();
   const db = getFirestore(app);
   const [loading, setLoading] = useState(false);
-  //   const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
+  const plunk = new Plunk(process.env.NEXT_PUBLIC_PLUNK_API_KEY);
   useEffect(() => {
     eventInfo?.duration && createTimeSlot(eventInfo?.duration);
   }, [eventInfo]);
@@ -74,8 +78,9 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
 
   /**
    * Handle Schedule Event on Click Schedule Button
-   * @returns
+   * returns
    */
+
   const handleScheduleEvent = async () => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (regex.test(userEmail) == false) {
@@ -100,7 +105,7 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
       userNote: userNote,
     }).then((resp) => {
       toast("Meeting Scheduled successfully!");
-      //   sendEmail(userName);
+      sendEmail(userName);
       console.log(userName);
     });
   };
@@ -124,6 +129,28 @@ function MeetingTimeDateSelection({ eventInfo, businessInfo }) {
     });
   };
 
+  const sendEmail = ({ user }) => {
+    const emailHtml = render(
+      <Email
+        businessName={businessInfo?.businessName}
+        date={format(date, "PPP").toString()}
+        duration={eventInfo?.duration}
+        meetingTime={eventInfo.locationUrl}
+        userFirstName={user}
+      />,
+    );
+
+    plunk.emails
+      .send({
+        to: userEmail,
+        subject: "Meeting Scheduled Details",
+        body: emailHtml,
+      })
+      .then((resp) => {
+        console.log(resp);
+        router.replace("/conformation");
+      });
+  };
   return (
     <div
       className="p-5 py-10 shadow-lg m-5 border-t-8
